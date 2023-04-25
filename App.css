@@ -1,0 +1,12 @@
+* {
+    top: 0;
+    left: 0;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.my-container {
+    max-width: 400px !important;
+    /* width: 400px; */
+}

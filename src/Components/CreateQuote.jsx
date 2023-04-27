@@ -1,16 +1,37 @@
+import { useMutation } from "@apollo/client";
 import React, { useState } from "react";
+import { CREATE_QUOTE } from "../GqlOpr/mutations";
+import { GET_ALL_QUOTES } from "../GqlOpr/queries";
 
 const CreateQuote = () => {
+  const [createQuote, { data, loading, error }] = useMutation(CREATE_QUOTE, {
+    refetchQueries: [GET_ALL_QUOTES, "getallquotes"],
+  });
+
   const [quote, setQuote] = useState();
 
   const handlesubmit = (e) => {
     e.preventDefault();
-    console.log("🚀 ~ file: CreateQuote.jsx:5 ~ CreateQuote ~ quote:", quote);
+    createQuote({
+      variables: {
+        name: quote,
+      },
+    });
   };
+
+  if (loading) {
+    return <h1>Loading...</h1>;
+  }
+
+  if (error) {
+    console.log(error.message);
+  }
 
   return (
     <>
       <div className="container my-container">
+        {error && <div className="red card-panel">{error.message}</div>}
+        {data && <div className="green card-panel">{data.quote}</div>}
         <form onSubmit={handlesubmit}>
           <input
             type="text"

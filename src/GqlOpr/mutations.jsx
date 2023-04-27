@@ -7,3 +7,17 @@ export const SIGNUP_USER = gql`
     }
   }
 `;
+
+export const LOGIN_USER = gql`
+  mutation signinuser($usersingin: UserSigninInput!) {
+    user: signinuser(usersingin: $usersingin) {
+      token
+    }
+  }
+`;
+
+export const CREATE_QUOTE = gql`
+  mutation createQuote($name: String!) {
+    quote: createQuote(name: $name)
+  }
+`;

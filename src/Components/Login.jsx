@@ -1,8 +1,24 @@
+import { useMutation } from "@apollo/client";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { LOGIN_USER } from "../GqlOpr/mutations";
 
 const Login = () => {
+  const navigate = useNavigate();
   const [formdata, setFormdata] = useState({});
+
+  const [signinUser, { data, loading, error }] = useMutation(LOGIN_USER);
+
+  if (loading) return <h1>Loading...</h1>;
+
+  if (error) {
+    console.log("🚀 ~ file: Signup.jsx:14 ~ Signup ~ error:", error.message);
+  }
+
+  if (data) {
+    localStorage.setItem("token", data.user.token);
+    navigate("/");
+  }
 
   const handlechange = (e) => {
     setFormdata({
@@ -13,15 +29,20 @@ const Login = () => {
 
   const handlesubmit = (e) => {
     e.preventDefault();
-    console.log("🚀 ~ file: Login.jsx:16 ~ handlesubmit ~ formdata:", formdata);
     setFormdata({
       [e.target.name]: "",
+    });
+    signinUser({
+      variables: {
+        usersingin: formdata,
+      },
     });
   };
 
   return (
     <>
       <div className="container my-container">
+        {error && <div className="red card-panel">{error.message}</div>}
         <h5>Login</h5>
         <form onSubmit={(e) => handlesubmit(e)}>
           <input

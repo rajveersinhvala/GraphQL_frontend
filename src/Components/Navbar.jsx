@@ -1,7 +1,9 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
+  const token = localStorage.getItem("token");
+  const navigate = useNavigate();
   return (
     <>
       <nav>
@@ -10,18 +12,37 @@ const Navbar = () => {
             <li>
               <Link to="/">Home</Link>
             </li>
-            <li>
-              <Link to="/login">Log in </Link>
-            </li>
-            <li>
-              <Link to="/signup">Sign Up</Link>
-            </li>
-            <li>
-              <Link to="/profile">profile</Link>
-            </li>
-            <li>
-              <Link to="/createquote">Create Quote</Link>
-            </li>
+
+            {token ? (
+              <>
+                <li>
+                  <Link to="/profile">profile</Link>
+                </li>
+                <li>
+                  <Link to="/createquote">Create Quote</Link>
+                </li>
+                <li>
+                  <button
+                    className="red btn"
+                    onClick={() => {
+                      localStorage.removeItem("token");
+                      navigate("/login");
+                    }}
+                  >
+                    Log Out
+                  </button>
+                </li>
+              </>
+            ) : (
+              <>
+                <li>
+                  <Link to="/login">Log in </Link>
+                </li>
+                <li>
+                  <Link to="/signup">Sign Up</Link>
+                </li>
+              </>
+            )}
           </ul>
         </div>
       </nav>
